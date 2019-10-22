@@ -262,6 +262,7 @@ function useredit(usercode) {
             }
             $("#roleselectedit").selectpicker('val', roleids);
             $("#roleselectedit").selectpicker("refresh");
+
         },
 
         error: function () {
@@ -325,7 +326,7 @@ function userdeleteCallback(usercode) {
 }
 
 function setpassword() {
-    let password = $("#newpassword").val();
+    let password = $("#passwordedit").val();
     let usercode = $("#userpasswordedit").val();
     let user = {
         usercode: usercode,

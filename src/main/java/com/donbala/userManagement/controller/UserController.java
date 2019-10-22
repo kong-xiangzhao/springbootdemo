@@ -55,7 +55,12 @@ public class UserController {
         cmsUser.setModifyuser(makeuser);
 
         List<CmsUserrole> cmsUserroleList = cmsUser.getCmsUserroles();
+        System.out.println("用户角色个数:"+cmsUserroleList.size());
+        System.out.println("用户名:"+cmsUserroleList.get(0).getUsercode());
+        System.out.println("角色ID:"+cmsUserroleList.get(0).getRoleid());
+        System.out.println("创建人:"+cmsUserroleList.get(0).getMakeuser());
         initUserroles(sysdate, makeuser, cmsUserroleList);
+        cmsUser.setCmsUserroles(cmsUserroleList);
 
         List<CmsUser> cmsUserList = cmsUserService.queryUsers(cmsUser);
         if (cmsUserList.size() > 0) {
@@ -115,6 +120,7 @@ public class UserController {
 
         List<CmsUserrole> cmsUserroleList = cmsUser.getCmsUserroles();
         initUserroles(sysDate, modifyuser, cmsUserroleList);
+        cmsUseredit.setCmsUserroles(cmsUserroleList);
 
         cmsUserService.editUser(cmsUseredit);
         messageNotice.setFlag("1");
@@ -139,6 +145,7 @@ public class UserController {
     @ResponseBody
     public MessageNotice setPassword(@RequestBody  CmsUser cmsUser) {
         System.out.println("--------"+ cmsUser.getUsercode());
+        System.out.println("--------"+ cmsUser.getPassword());
         MessageNotice messageNotice = new MessageNotice();
         String password = DigestUtils.md5DigestAsHex(cmsUser.getPassword().getBytes());
         System.out.println(password);

@@ -29,13 +29,13 @@
       and roleid = #{roleid}
     </if>
     <if test="rolename != null and rolename !=''">
-      and rolename like concat('%',#{rolename},'%')
+      and instr(rolename,#{rolename})>0
     </if>
     <if test="makedate != null and makedate != ''">
-      and makedate &gt;= STR_TO_DATE(#{makedate},"%Y-%m-%d")
+      and makedate &gt;= to_date(#{makedate},'yyyy-mm-dd')
     </if>
     <if test="makedate != null and makedate != ''">
-      and makedate &lt; date_add(#{makedate}, interval 1 day)
+      and makedate &lt; to_date(#{makedate},'yyyy-mm-dd')+1
     </if>
   </select>
 
@@ -47,8 +47,8 @@
     insert into cms_role (ROLEID, ROLENAME, MAKEDATE, 
       MAKEUSER, MODIFYDATE, MODIFYUSER
       )
-    values (#{roleid,jdbcType=VARCHAR}, #{rolename,jdbcType=VARCHAR}, #{makedate,jdbcType=TIMESTAMP}, 
-      #{makeuser,jdbcType=VARCHAR}, #{modifydate,jdbcType=TIMESTAMP}, #{modifyuser,jdbcType=VARCHAR}
+    values (#{roleid,jdbcType=VARCHAR}, #{rolename,jdbcType=VARCHAR}, to_date(#{makedate,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss'),
+      #{makeuser,jdbcType=VARCHAR}, to_date(#{modifydate,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss'), #{modifyuser,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.donbala.roleManagement.model.CmsRole">
