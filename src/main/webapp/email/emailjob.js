@@ -311,64 +311,6 @@ function deleteEmail(id) {
     });
 }
 
-//启用
-function startEmail(id) {
-    var params={
-        id:id
-    }
-    $.ajax({
-        url:systemPath + "/email/management/startEmail",
-        type: "POST",
-        dateType: "json",
-        data: params,
-        success: function (data) {
-            swal({
-                    title: data.msg,
-                    type: data.status
-                },
-                function(){
-                    window.location.reload();//重新刷新页面
-                }
-            );
-        },
-        error: function () {
-            swal({
-                title: "出错了 o(╯□╰)o",
-                type: "error"
-            });
-        }
-    });
-}
-//停用
-function stopEmail(id) {
-    console.log(id);
-    var params={
-        id:id
-    }
-    $.ajax({
-        url:systemPath + "/email/management/stopEmail",
-        type: "POST",
-        dateType: "json",
-        data: params,
-        success: function (data) {
-            swal({
-                    title: data.msg,
-                    type: data.status
-                },
-                function(){
-                    window.location.reload();//重新刷新页面
-                }
-            );
-        },
-        error: function () {
-            swal({
-                title: "出错了 o(╯□╰)o",
-                type: "error"
-            });
-        }
-    });
-}
-
 /**
  * 新增邮箱-实现
  */
