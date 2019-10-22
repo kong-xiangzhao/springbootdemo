@@ -82,9 +82,9 @@
 
     <insert id="insertList" parameterType="java.util.List">
         insert into cms_userrole values
-        <foreach collection="list" item="cmsUserrole" separator="," close=";">
-            (#{cmsUserrole.usercode},#{cmsUserrole.roleid},#{cmsUserrole.makedate},#{cmsUserrole.makeuser},
-            #{cmsUserrole.modifydate},#{cmsUserrole.modifyuser})
+        <foreach collection="list" item="cmsUserrole" separator=",">
+            (#{cmsUserrole.usercode},#{cmsUserrole.roleid},to_date(#{cmsUserrole.makedate},'yyyy-mm-dd hh24:mi:ss'),#{cmsUserrole.makeuser},
+            to_date(#{cmsUserrole.modifydate},'yyyy-mm-dd hh24:mi:ss'),#{cmsUserrole.modifyuser})
         </foreach>
     </insert>
 
