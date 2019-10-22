@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>demo1</title>
+    <link rel="stylesheet" type="text/css" href="../assets/css/lib/bootstrap.min.css">
+    <style type="text/css">
+        .container {
+            background: white;
+
+        }
+
+        div[class|=col] { /*选择器的一种*/
+            /*border: 2px solid;*/
+            /*height: 50px;*/
+            /*width: 100px;*/
+        }
+
+        .btn {
+            background: #8CD4F5;
+            color: red;
+            width: 100px;
+        }
+    </style>
+    <script type="text/javascript">
+
+            function fn1(value) {
+                var result = "";
+                var screen=document.getElementById("screen")
+                result=screen.innerText+value;
+                screen.innerText=result;
+            }
+
+    </script>
+</head>
+<body>
+
+<div class="container">
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-12" style="height: 30px;border: 2px solid;">
+                <span class="text-center" id="screen" ></span>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"><input onclick="fn1(this.value)"type="button" value="C" class="btn btn-primary m-b-10 m-l-5"id="clear"></input></div>
+            <div class="col-md-3"><input onclick="fn1(this.value)"type="button" value="/" class="btn btn-primary m-b-10 m-l-5"id="chu"></input></div>
+            <div class="col-md-3"><input onclick="fn1(this.value)"type="button" value="*" class="btn btn-primary m-b-10 m-l-5"id="cheng"></input></div>
+            <div class="col-md-3"><input onclick="fn1(this.value)"type="button" value="<-" class="btn btn-primary m-b-10 m-l-5"id="backspace"></input></div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"><input onclick="fn1(this.value)"type="button" value="9" class="btn btn-primary m-b-10 m-l-5"id="9"></input></div>
+            <div class="col-md-3"><input onclick="fn1(this.value)"type="button" value="8" class="btn btn-primary m-b-10 m-l-5"id="8"></input></div>
+            <div class="col-md-3"><input onclick="fn1(this.value)"type="button" value="7" class="btn btn-primary m-b-10 m-l-5"id="7"></input></div>
+            <div class="col-md-3"><input onclick="fn1(this.value)"type="button" value="-" class="btn btn-primary m-b-10 m-l-5"id="jian"></input></div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"><input onclick="fn1(this.value)"type="button" value="6" class="btn btn-primary m-b-10 m-l-5"id="6"></input></div>
+            <div class="col-md-3"><input onclick="fn1(this.value)"type="button" value="5" class="btn btn-primary m-b-10 m-l-5"id="5"></input></div>
+            <div class="col-md-3"><input onclick="fn1(this.value)"type="button" value="4" class="btn btn-primary m-b-10 m-l-5"id="4"></input></div>
+            <div class="col-md-3"><input onclick="fn1(this.value)"type="button" value="+" class="btn btn-primary m-b-10 m-l-5"id="jia"></input></div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"><input onclick="fn1(this.value)"type="button" value="3" class="btn btn-primary m-b-10 m-l-5"id="3"></input></div>
+            <div class="col-md-3"><input onclick="fn1(this.value)"type="button" value="2" class="btn btn-primary m-b-10 m-l-5"id="2"></input></div>
+            <div class="col-md-3"><input onclick="fn1(this.value)"type="button" value="1" class="btn btn-primary m-b-10 m-l-5"id="1"></input></div>
+            <div class="col-md-3"><input onclick="fn1(this.value)"type="button" value="平方" class="btn btn-primary m-b-10 m-l-5"id="pf"></input></div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"><input onclick="fn1(this.value)"type="button" value="%" class="btn btn-primary m-b-10 m-l-5"id="bf"></input></div>
+            <div class="col-md-3"><input onclick="fn1(this.value)"type="button" value="0" class="btn btn-primary m-b-10 m-l-5"id="0"></input></div>
+            <div class="col-md-3"><input onclick="fn1(this.value)"type="button" value="." class="btn btn-primary m-b-10 m-l-5"id="dian"></input></div>
+            <div class="col-md-3"><input onclick="fn1(this.value)"type="button" value="=" class="btn btn-primary m-b-10 m-l-5"id="dengyu"></input></div>
+        </div>
+    </div>
+    <div class="col-md-6"></div>
+
+</div>
+
+</body>
+<script src="../assets/js/lib/jquery.min.js"></script>
+<script src="../assets/js/lib/bootstrap.min.js"></script>
+</html>

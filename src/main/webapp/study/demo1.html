@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>demo1</title>
+    <link rel="stylesheet" type="text/css" href="../assets/css/lib/bootstrap.min.css">
+    <style type="text/css">
+        .container{
+            background: pink;
+        }
+        div[class|=col]{/*选择器的一种*/
+            border: 1px solid;
+        }
+        li{
+            background: blue;
+            color: red;
+        }
+    </style>
+    <script type="text/javascript">
+        function fn1() {
+            var input = document.getElementById("input");
+            var num=input.value;
+            var span = document.getElementById("span");
+            if(isNaN(num)){
+                span.innerHTML = "请输入数字";
+            }else{
+                span.innerHTML=num*num;
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <div class="container">
+        <div class="row"><!--一行-->
+            <div class="col-lg-6">
+                <div class="row">
+
+                </div>
+            </div><!--一列-->
+            <div class="col-lg-6">
+
+            </div><!--又是一列-->
+        </div>
+        <div class="row"><!--一行-->
+            <div class="col-lg-10">col-lg-10</div><!--一列-->
+            <div class="col-lg-2">col-lg-2</div><!--又是一列-->
+        </div>
+    </div>
+
+    <input id="input" type="text">
+    <input type="button" value="平方" onclick="fn1()">
+    <span>=</span>
+    <span id="span" >计算结果</span>
+    <div>
+        <a href="http://localhost:8081" >张茂龙</a>
+    </div>
+    <ul>
+        <li>貂蝉</li>
+        <ol>
+            <li>貂蝉</li>
+            <li>吕布</li>
+            <li>张飞</li>
+            <li>马云</li>
+        </ol>
+        <li>吕布</li>
+        <li>张飞</li>
+        <li>马云</li>
+    </ul>
+    <img src="https://i0.hdslb.com/bfs/sycp/creative_img/201909/67e8037798ea2be8b85d356676240b05.jpg"
+         title="妃十三学院" width="320" alt="图片碎了" target="_blank">
+    <div>
+        <a href="https://i0.hdslb.com/bfs/sycp/creative_img/201909/67e8037798ea2be8b85d356676240b05.jpg">跳转图片</a>
+    </div>
+    <form action="url" method="get">
+
+        <h3>登录学子商城</h3>
+        <div>
+            <label>请输入用户名:</label>
+            <input type="text" name="username">
+        </div>
+
+        <div>
+            <label>请输入密码:</label>
+            <input type="password" name="pwd">
+        </div>
+        <div>
+            <input id="auto" type="checkbox" name="auto">
+            <label for="auto">自动登录</label>
+        </div>
+        <div>
+            <input type="submit" value="登录">
+        </div>
+
+
+    </form>
+    &nbsp;
+    &nbsp;
+    &nbsp;
+    <a href="#" style="color: red;text-decoration: none;border-width: 2px;border-style: solid;border-color: blue;border-radius: 5px">样式测试</a>
+
+    <a href="#charAt">锚点测试</a>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <span id="charAt">我是地点</span>
+</body>
+<script src="../assets/js/lib/jquery.min.js"></script>
+<script src="../assets/js/lib/bootstrap.min.js"></script>
+</html>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.donbala.emailManagement.dao.EmailManagementDao">
+    <!--插入邮箱信息-->
+    <insert id="insertEmailInfo" parameterType="com.donbala.emailManagement.model.EmailModel">
+        insert into CMS_EMAILMAININFO (id,email,epassword,ehost,Enickname,Estatus,erole,makedate,Makeuser,Modifydate,Modifyuser)
+        values (#{id},#{email},#{ePassword},#{eHost},#{nickName},#{eStatus},#{eRole},
+            TO_DATE(#{makeDate},'yyyy-mm-dd hh24:mi:ss'),#{makeUser},TO_DATE(#{modifyDate},'yyyy-mm-dd hh24:mi:ss'),#{modifyUser})
+      </insert>
+    <!--查询邮箱信息-->
+    <select id="selectEmailInfo" resultType="com.donbala.emailManagement.model.EmailModel">
+          select e.id,
+             e.email,
+             e.ePassword,
+             e.eHost,
+             e.enickName nickName,
+             (case e.estatus
+               when '1' then
+                '启用'
+               when '0' then
+                '停用'
+             end) eStatus,
+             (case e.eRole
+               when 'R' then
+                '收件人'
+               when 'S' then
+                '发件人'
+               when 'C' then
+                '抄送人'
+             end) eRole
+          from cms_emailmaininfo e
+      </select>
+    <!--启/停 用邮箱-->
+    <update id="startOrStopEmail" parameterType="com.donbala.emailManagement.model.EmailModel">
+          update cms_emailmaininfo set estatus=#{eStatus} where id=#{id}
+    </update>
+    <!--删除邮箱-->
+    <delete id="deleteEmail" parameterType="com.donbala.emailManagement.model.EmailModel">
+        delete from cms_emailmaininfo where id=#{id}
+    </delete>
+    <!--回显-->
+    <select id="selectReturnEmailInfo" parameterType="com.donbala.emailManagement.model.EmailModel"
+            resultType="com.donbala.emailManagement.model.EmailModel">
+          select e.id,
+             e.email,
+             e.ePassword,
+             e.eHost,
+             e.enickName nickName,
+             e.eStatus,
+             e.eRole
+          from cms_emailmaininfo e
+          where e.id=#{id}
+    </select>
+    <!--修改邮箱-->
+    <update id="editEmail" parameterType="com.donbala.emailManagement.model.EmailModel">
+        update cms_emailmaininfo set email=#{email},estatus=#{eStatus},erole=#{eRole},ehost=#{eHost},epassword=#{ePassword},enickName=#{nickName},
+         Modifydate=TO_DATE(#{modifyDate},'yyyy-mm-dd hh24:mi:ss'),modifyUser=#{modifyUser}
+         where id=#{id}
+    </update>
+
+    <!--查询每个发送任务的邮箱信息-->
+    <select id="selectEmailInfoByCode" parameterType="com.donbala.emailManagement.model.EmailModel"
+            resultType="com.donbala.emailManagement.model.EmailModel">
+        select m.email,
+               m.ePassword,
+               m.eHost,
+               m.enickname nickName,
+               m.eStatus,
+               m.eRole
+          from cms_emailjobaddress a, cms_emailmaininfo m
+         where a.emailid = m.id
+           and m.estatus = '1'
+           and a.emailjobcode = #{emailJobCode}
+    </select>
+    <!--发送任务表格查询-->
+    <select id="selectEmailJobList" resultType="com.donbala.emailManagement.model.EmailJobModel">
+          select d.emailJobCode,
+                d.emailJobName,
+                (select m.email
+                   from cms_emailjobaddress a, cms_emailmaininfo m
+                  where a.emailid = m.id
+                    and a.emailjobcode = d.emailjobcode
+                    and m.erole = 'S'
+                    and m.estatus = '1') emailSender,
+                 (select wm_concat(m.email)
+                   from cms_emailjobaddress a, cms_emailmaininfo m
+                  where a.emailid = m.id
+                    and a.emailjobcode = d.emailjobcode
+                    and m.erole = 'R'
+                    and m.estatus = '1') emailReceiver,
+                  (select wm_concat(m.email)
+                   from cms_emailjobaddress a, cms_emailmaininfo m
+                  where a.emailid = m.id
+                    and a.emailjobcode = d.emailjobcode
+                    and m.erole = 'C'
+                    and m.estatus = '1') emailCopype
+           from cms_emailjobdef d
+          where exists (select 1
+                   from cms_emailjobaddress a
+                  where a.emailjobcode = d.emailjobcode)
+    </select>
+</mapper>
