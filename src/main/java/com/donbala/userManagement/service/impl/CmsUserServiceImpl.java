@@ -129,7 +129,16 @@ public class CmsUserServiceImpl implements CmsUserServiceIntf {
     @Transactional
     @Override
     public void saveUser(CmsUser cmsUser) {
-        cmsUserMapper.insert(cmsUser);
+        cmsUserMapper.insertSelective(cmsUser);
+        for(CmsUserrole cmsUserrole : cmsUser.getCmsUserroles()){
+            System.out.println("用户名:"+cmsUserrole.getUsercode());
+            System.out.println("角色名:"+cmsUserrole.getRoleid());
+            System.out.println("创建时间:"+cmsUserrole.getMakedate());
+            System.out.println("创建人:"+cmsUserrole.getMakeuser());
+            System.out.println("更改时间:"+cmsUserrole.getModifydate());
+            System.out.println("更改人:"+cmsUserrole.getModifyuser());
+
+        }
         cmsUserroleMapper.insertList(cmsUser.getCmsUserroles());
     }
 
