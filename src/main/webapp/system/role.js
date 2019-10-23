@@ -480,7 +480,15 @@ $(function(){
         queryrolelist();
     });
 
+    //点击新增模态框时，清空所有输入框以及菜单树
     $("#addrole").click(function () {
+        $("#newroleid").val("");
+        //将角色ID输入框只读树形去除
+        $("#newroleid").attr("readonly",false);
+        $("#newrolename").val("");
+        //新增模态框弹出时，将树形菜单的值都置为未选状态
+        $('#menutree').treeview('uncheckAll', { silent: true });
+
         $operatetype = "insert";
     })
 

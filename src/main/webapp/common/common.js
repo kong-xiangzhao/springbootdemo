@@ -78,6 +78,7 @@ function emptyModel(elementIds) {
         if(elementType=="FORM"){
             document.getElementById(elementIds[i]).reset();//form表单的清空方法
         }else if(elementType=="SELECT"){
+            $("#"+elementIds[i]).selectpicker("val",["noneSelectedText"]);
             $("#"+elementIds[i]).selectpicker('refresh');
             $("#"+elementIds[i]).selectpicker('render');//清空下拉选
         }else if(elementType=="DIV"){
