@@ -79,14 +79,18 @@
     </trim>
   </insert>
 
-
-    <insert id="insertList" parameterType="java.util.List">
-        insert into cms_userrole values
-        <foreach collection="list" item="cmsUserrole" separator=",">
-            (#{cmsUserrole.usercode},#{cmsUserrole.roleid},to_date(#{cmsUserrole.makedate},'yyyy-mm-dd hh24:mi:ss'),#{cmsUserrole.makeuser},
-            to_date(#{cmsUserrole.modifydate},'yyyy-mm-dd hh24:mi:ss'),#{cmsUserrole.modifyuser})
-        </foreach>
-    </insert>
+  <!-- 用户多个角色时，批量插入多条使用 insert all 语法，比使用多个insert语句效率要高 -->
+  <insert id="insertList" parameterType="java.util.List">
+    insert all
+    <foreach collection="list" item="cmsUserrole">
+      into cms_userrole
+        (usercode, roleid, makedate, makeuser, modifydate, modifyuser)
+      values
+        (#{cmsUserrole.usercode},#{cmsUserrole.roleid},to_date(#{cmsUserrole.makedate},'yyyy-mm-dd hh24:mi:ss'),#{cmsUserrole.makeuser},
+        to_date(#{cmsUserrole.modifydate},'yyyy-mm-dd hh24:mi:ss'),#{cmsUserrole.modifyuser})
+    </foreach>
+    select * from dual
+  </insert>
 
 
     <update id="updateByPrimaryKeySelective" parameterType="com.donbala.roleManagement.model.CmsUserrole">
