@@ -81,7 +81,7 @@ function initTable() {
             }]
         ],
         formatNoMatches: function(){
-            return "没有相关的匹配结果";
+            return "你瞅啥，没有！";
         },
         formatLoadingMessage: function(){
             return "请稍等，正在加载中。。。";
@@ -91,23 +91,12 @@ function initTable() {
 
 /*操作列的格式*/
 function operateFormatter(value, row, index) {
-    var sas = '';
-    var sasstr = '';
-    if(row.eStatus=='停用'){
-        sas='<a id="startEmail" href="javascript:void(0)" title="启用" style="color: green">';
-        sasstr='启用';
-    }else if(row.eStatus=='启用'){
-        sas='<a id="stopEmail" href="javascript:void(0)" title="停用" style="color: red">';
-        sasstr='停用';
-    }
     return [
-        '<a id="editEmail" href="javascript:void(0)" title="编辑" data-toggle="modal" data-target="#emailEditForm" style="color: blue">',
+        '<a id="editEmailJob" href="javascript:void(0)" title="编辑" data-toggle="modal" data-target="#emailEditForm" style="color: blue">',
         '编辑',
         '</a>  ',
-        sas,
-        sasstr,
         '</a> ',
-        '<a id="deleteEmail" href="javascript:void(0)" title="删除" data-toggle="modal" data-target=""  style="color: red">',
+        '<a id="deleteEmailJob" href="javascript:void(0)" title="删除" data-toggle="modal" data-target=""  style="color: red">',
         '删除',
         '</a>'
     ].join('');
@@ -116,17 +105,11 @@ function operateFormatter(value, row, index) {
 /*操作列的按钮方法*/
 window.operateEvents = {
 
-    'click #editEmail': function (e, value, row, index) {
-        emailReturnView(row.id);
+    'click #editEmailJob': function (e, value, row, index) {
+        emailReturnView(row.emailJobCode);
     },
-    'click #startEmail': function (e, value, row, index) {
-        startEmail(row.id);
-    },
-    'click #stopEmail': function (e, value, row, index) {
-        stopEmail(row.id);
-    },
-    'click #deleteEmail': function (e, value, row, index) {
-        isDeleteEmail(row.id);
+    'click #deleteEmailJob': function (e, value, row, index) {
+        isDeleteEmailJob(row.emailJobCode);
     }
 }
 function queryEmailList() {
@@ -269,7 +252,7 @@ function emailReturnView(id) {
 }
 
 /*是否删除邮箱*/
-function isDeleteEmail(id) {
+function isDeleteEmailJob(emailJobCode) {
     swal({
             title: "确定删除吗？",
             type: "warning",
@@ -279,16 +262,17 @@ function isDeleteEmail(id) {
             closeOnConfirm: false
         },
         function(){
-            deleteEmail(id);
+            deleteEmailJob(emailJobCode);
         });
 }
 //删除邮箱
-function deleteEmail(id) {
+function deleteEmailJob(emailJobCode) {
     var params={
-        id:id
+        emailJobCode:emailJobCode
     }
+
     $.ajax({
-        url:systemPath + "/email/management/deleteEmail",
+        url:systemPath + "/email/management/deleteEmailJob",
         type: "POST",
         dateType: "json",
         data: params,
@@ -309,10 +293,11 @@ function deleteEmail(id) {
             });
         }
     });
+
 }
 
 /**
- * 新增邮箱-实现
+ * 新增发送任务-实现
  */
 function saveEmailJob() {
     var emailJob=$("#emailJob").val();
@@ -328,23 +313,14 @@ function saveEmailJob() {
         emailReceiver:receiver,
         emailCopype:copype
     };
-    console.log(params);
-    // for (let param in params){
-    //     console.log(params[param])
-    // }
-    /*
-    //验证非空
-    params=checkIsNull(params);
-    // console.log(params.flag)
-    //将undefined的转为空字符串
-    for (let param in params){
-        if(params[param]==undefined){
-            params[param] = "";
-        }
-    }
-    if(params.flag){
+    // console.log(params);
+
+    var flag=checkIsNull(params);
+    // console.log(flag);
+
+    if(flag){
         $.ajax({
-            url: systemPath + "/email/management/insertEmail",
+            url: systemPath + "/email/management/insertEmailJob",
             type: "POST",
             dateType: JSON,
             data: params,
@@ -369,23 +345,10 @@ function saveEmailJob() {
             }
         });
     }
-*/
+
 
 }
-//字符串数组转化成以逗号分隔的字符串
-function getTextByJs(params) {
-    var str = "";
-    if(params!=null){
-        for (var i = 0; i < params.length; i++) {
-            str += params[i]+ ",";
-        }
-        //去掉最后一个逗号(如果不需要去掉，就不用写)
-        if (str.length > 0) {
-            str = str.substr(0, str.length - 1);
-        }
-    }
-    return str;
-}
+
 
 
 /**
@@ -489,45 +452,29 @@ function initDatePicker(elementid) {
  */
 function checkIsNull(params) {
     // console.log(params);
-
+    var flag=true;
     for (let prop in params) {
         // console.log(prop+"1111");
 
         if(params[prop]=="" || params[prop]==undefined){
-            console.log(params[prop]);
-            if(prop=="email"){
-                alertSwal("邮箱不能为空", "warning");
-                params.flag = false;
+            // console.log(params[prop]);
+            if(prop=="emailJobCode"){
+                alertSwal("发送任务不能为空", "warning");
+                flag = false;
                 return params;
-            }else if(prop=="eStatus"){
-                alertSwal("启停状态不能为空", "warning");
-                params.flag = false;
+            }else if(prop=="emailSender"){
+                alertSwal("发件人不能为空", "warning");
+                flag = false;
                 return params;
-            }else if(prop=="eRole"){
-                alertSwal("邮箱角色不能为空", "warning");
-                params.flag = false;
+            }else if(prop=="emailReceiver"){
+                alertSwal("收件人不能为空", "warning");
+                flag = false;
                 return params;
-            }else if(params.eRole=="S"){
-                if(prop=="eHost"){
-                    alertSwal("邮箱服务器不能为空", "warning");
-
-                    params.flag = false;
-                    return params;
-                }else if(prop=="ePassword"){
-                    alertSwal("密码不能为空", "warning");
-                    params.flag = false;
-                    return params;
-                }else if(prop=="nickName"){
-                    alertSwal("昵称不能为空", "warning");
-                    params.flag = false;
-                    return params;
-                }
             }
 
         }
     }
-    params.flag = true;
-    return params;
+    return flag;
 
 }
 //弹框

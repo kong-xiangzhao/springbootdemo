@@ -7,9 +7,14 @@ $(function(){
         emptyModel(["emailInfoAddForm","eStatus","eRole","initParam"]);
     });
 
-    //初始化表格
-    initTable();
-    queryEmailList();
+    //初始化发件邮箱表格
+    initSendEmailTable();
+    queryEmailList("#sendemailtable","S");
+
+    //初始化通讯邮箱表格
+    initReceiveEmailTable();
+    queryEmailList("#receiveemailtable","T");
+
     //邮箱角色下拉框值改变事件
     $('#eRole').change(function(){
         initJobParam("#initParam","");
@@ -34,8 +39,8 @@ $(function(){
 
 
 /* -----------------------成员函数 begin------------------------------------------*/
-function initTable() {
-    $("#jobplantable").bootstrapTable('destroy').bootstrapTable({
+function initSendEmailTable() {
+    $("#sendemailtable").bootstrapTable('destroy').bootstrapTable({
         columns: [
             [{
                 title: 'ID',
@@ -75,11 +80,45 @@ function initTable() {
                 valign: 'middle',
                 width: 50
             },{
-                title: '邮箱角色',
-                field: 'eRole',
+                title: '操作',
+                field: 'operate',
+                align: 'center',
+                valign: 'middle',
+                width: 150,
+                events: window.operateEvents,
+                formatter: operateFormatter
+            }]
+        ],
+        formatNoMatches: function(){
+            return "你瞅啥，没有！";
+        },
+        formatLoadingMessage: function(){
+            return "请稍等，正在加载中。。。";
+        }
+    });
+}
+function initReceiveEmailTable() {
+    $("#receiveemailtable").bootstrapTable('destroy').bootstrapTable({
+        columns: [
+            [{
+                title: 'ID',
+                field: 'id',
+                align: 'center',
+                valign: 'middle',
+                visible: 0,
+                width: 50
+            }, {
+                title: '邮箱',
+                field: 'email',
                 align: 'center',
                 valign: 'middle',
                 width: 100
+            },{
+                title: '启用/停用',
+                field: 'eStatus',
+                align: 'center',
+                valign: 'middle',
+                width: 50
             },{
                 title: '操作',
                 field: 'operate',
@@ -91,14 +130,13 @@ function initTable() {
             }]
         ],
         formatNoMatches: function(){
-            return "没有相关的匹配结果";
+            return "你瞅啥，没有！";
         },
         formatLoadingMessage: function(){
             return "请稍等，正在加载中。。。";
         }
     });
 }
-
 /*操作列的格式*/
 function operateFormatter(value, row, index) {
     var sas = '';
@@ -139,14 +177,17 @@ window.operateEvents = {
         isDeleteEmail(row.id);
     }
 }
-function queryEmailList() {
+function queryEmailList(tableElementId,eRole) {
+    var param={
+        eRole:eRole
+    }
     $.ajax({
         url: systemPath + "/email/management/selectEmail",
         type: "POST",
         dateType: "json",
-        data: [],
+        data: param,
         success: function (data) {
-            $("#jobplantable").bootstrapTable('load',data);
+            $(tableElementId).bootstrapTable('load',data);
         },
         error: function () {
             swal({
@@ -383,7 +424,7 @@ function stopEmail(id) {
  * 新增邮箱-实现
  */
 function saveEmail() {
-    var email=$("#email").val();
+    var email=$("#email").val().trim();
     var eStatus=$("#eStatus").val();
     var eRole=$("#eRole").val();
     var eHost=$("#eHost").val();

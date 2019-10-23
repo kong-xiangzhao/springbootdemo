@@ -267,11 +267,11 @@ function jobReturnView(jobPlanCode,IP) {
 
             $("#jobDescEdit").val(data.returnView[0].jobPlanDesc);
             let len = data.paramByCode.length;
+            $("#jobEditHiddenByJobPlanCode").append("<input id=\"jobPlanCodeEdit\" name=\"jobPlanCodeEdit\" type=\"hidden\" value=\""+jobPlanCode+"\">")
             if(len!=0){
                 // console.log(len);
                 $("#initParamEdit").empty();//每次加载清空div的内容
                 $("#initParamEdit").append("<div style=\"margin-left: 1.5%\"><h4>作业参数</h4></div><hr style=\"width: 100%\"/>");
-                $("#jobEditHiddenByJobPlanCode").append("<input id=\"jobPlanCodeEdit\" name=\"jobPlanCodeEdit\" type=\"hidden\" value=\""+jobPlanCode+"\">")
                 var suffix = "Edit";
                 var labelText = "";
                 var inputId = "";
@@ -445,6 +445,7 @@ function saveJob() {
 
     var initParam = $("#jobPlanAddForm").serializeArray();//获取form表单中的录入项，input，select、、、
     console.log(initParam);
+    var paramArray=new Array();
     var paramId;
     for(let i=0;i<initParam.length;i++){
         console.log(initParam[i].name)
@@ -466,7 +467,7 @@ function saveJob() {
         }
 
         if(paramId!="jobCode"&&paramId!="repeatInterval"&&paramId!="repeatUnit"&&paramId!="jobStartDate"&&paramId!="jobDesc"){
-            paramValue=paramValue+$("#"+paramId).val();
+            paramArray.push(paramId+":"+$("#"+paramId).val());
         }
     }
 
@@ -482,8 +483,10 @@ function saveJob() {
     };
     var paramDiv = $("#initParam").html();
     if(paramDiv.length>0){
-        params.paramValue = paramValue;
+        params.paramValue = getTextByJs(paramArray);
     }
+    // console.log(params.paramValue)
+
     //验证非空
     let flag=checkIsNull(params);
     if(flag) {
@@ -522,6 +525,7 @@ function saveJob() {
  * 修改计划提交-实现
  */
 function editJobPlan() {
+    var jobPlanCode="";
     var jobCode="";
     var repeatInterval="";
     var repeatUnit="";
@@ -531,12 +535,16 @@ function editJobPlan() {
 
     var initParam = $("#jobPlanEditForm").serializeArray();//获取form表单中的录入项，input，select、、、
     console.log(initParam);
+    var paramArray=new Array();
     var paramId;
     for(let i=0;i<initParam.length;i++){
         console.log(initParam[i].name)
         paramId=initParam[i].name
         if(paramId=="jobCodeEdit"){
             jobCode=$("#"+paramId).val();
+        }
+        if(paramId=="jobPlanCodeEdit"){
+            jobPlanCode=$("#"+paramId).val();
         }
         if(paramId=="repeatIntervalEdit"){
             repeatInterval=$("#"+paramId).val();
@@ -551,14 +559,15 @@ function editJobPlan() {
             jobDesc=$("#"+paramId).val();
         }
 
-        if(paramId!="jobCodeEdit"&&paramId!="repeatIntervalEdit"&&paramId!="repeatUnitEdit"&&paramId!="jobStartDateEdit"&&paramId!="jobDescEdit"){
-            paramValue=paramValue+$("#"+paramId).val();
+        if(paramId!="jobCodeEdit"&&paramId!="repeatIntervalEdit"&&paramId!="repeatUnitEdit"&&paramId!="jobStartDateEdit"&&paramId!="jobDescEdit"&&paramId!="jobPlanCodeEdit"){
+            paramArray.push(paramId.substr(0, paramId.length - 4)+":"+$("#"+paramId).val());
         }
     }
 
-
+    console.log("计划号："+jobPlanCode);
     var params = {
         jobCode: jobCode,
+        jobPlanCode:jobPlanCode,
         repeatInterval: repeatInterval,
         repeatUnit: repeatUnit,
         startDate: jobStartDate,
@@ -567,11 +576,11 @@ function editJobPlan() {
     };
     var paramDiv = $("#initParamEdit").html();
     if(paramDiv.length>0){
-        params.paramValue = paramValue;
+        params.paramValue = getTextByJs(paramArray);
     }
-
     //验证非空
     let flag=checkIsNull(params);
+    alert(flag)
     if(flag){
         $.ajax({
             url: systemPath + "/quartz/management/editJobPlan",

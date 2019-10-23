@@ -40,13 +40,19 @@ public class EmailManagementServiceImpl implements EmailManagementService {
     @Transactional
     public Map<String, Object> insertEmailInfo(EmailModel emailModel) {
         Map<String,Object> map = new HashMap<>();
+        int emailExists = emailManagementDao.selectEmailInfoCount(emailModel);
+        if(emailExists>0){
+            map.put("code", "405");
+            map.put("status", "warning");
+            map.put("msg", "该角色下邮箱已存在");
+            return map;
+        }
         String date = DateUtil.getSysDate();
         emailModel.setMakeDate(date);
         emailModel.setModifyDate(date);
         String uuid = UUID.randomUUID().toString().replaceAll("-", "");
         emailModel.setId(uuid);
         try {
-            //新增前做只有一个发件人校验--以后
             emailManagementDao.insertEmailInfo(emailModel);
 
             map.put("code", "200");
@@ -70,8 +76,8 @@ public class EmailManagementServiceImpl implements EmailManagementService {
      * @return java.util.List<com.donbala.emailManagement.model.EmailModel>
      */
     @Override
-    public List<EmailModel> selectEmailInfo() {
-        return emailManagementDao.selectEmailInfo();
+    public List<EmailModel> selectEmailInfo(EmailModel emailModel) {
+        return emailManagementDao.selectEmailInfo(emailModel);
     }
     /**
      * 启用
@@ -169,6 +175,13 @@ public class EmailManagementServiceImpl implements EmailManagementService {
     @Transactional
     public Map<String,Object> editEmail(EmailModel emailModel) {
         Map<String,Object> map = new HashMap<>();
+        int emailExists = emailManagementDao.selectEmailInfoCount(emailModel);
+        if(emailExists>0){
+            map.put("code", "405");
+            map.put("status", "warning");
+            map.put("msg", "该角色下邮箱已存在");
+            return map;
+        }
         String date = DateUtil.getSysDate();
         emailModel.setModifyDate(date);
         //修改前做只有一个发件人校验--以后
@@ -190,6 +203,94 @@ public class EmailManagementServiceImpl implements EmailManagementService {
     @Override
     public List<EmailJobModel> selectEmailJobList() {
         return emailManagementDao.selectEmailJobList();
+    }
+    /**
+     * 新增发送任务
+     *  {\_/}
+     * ( ^.^ )
+     *  / > @ zhangmaofei
+     * @date 2019/10/23 9:58
+     * @param emailJobModel 1
+     * @return java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Override
+    public Map<String, Object> insertEmailJob(EmailJobModel emailJobModel) {
+        Map<String, Object> map = new HashMap<>();
+        String emailJobCode = emailJobModel.getEmailJobCode();
+        String sender = emailJobModel.getEmailSender();
+        String receiver = emailJobModel.getEmailReceiver();
+        String copype = emailJobModel.getEmailCopype();
+        String operater = emailJobModel.getMakeUser();
+        int exists = emailManagementDao.selectEmailJobCount(emailJobModel);
+        //验证是否有此任务，有-不可新增
+        if(exists>0){
+            map.put("code", "405");
+            map.put("status", "warning");
+            map.put("msg", "该任务已存在");
+            return map;
+        }
+        //开始新增
+        List<Map<String, String>> list = new ArrayList<>();
+        List<Map<String, String>> sList = getStructureToDB(sender.split(","), emailJobCode, "S",operater);
+        List<Map<String, String>> rList = getStructureToDB(receiver.split(","), emailJobCode, "R",operater);
+        List<Map<String, String>> cList = new ArrayList<>();
+        if(!copype.equals("")){
+            cList = getStructureToDB(copype.split(","), emailJobCode, "C",operater);
+        }
+        list.addAll(sList);
+        list.addAll(rList);
+        list.addAll(cList);
+        //入库
+        emailManagementDao.insertEmailJob(list);
+        map.put("code", "200");
+        map.put("status", "success");
+        map.put("msg", "发送任务新增成功");
+
+        return map;
+    }
+    /**
+     * 删除发送任务
+     *  {\_/}
+     * ( ^.^ )
+     *  / > @ zhangmaofei
+     * @date 2019/10/23 17:54
+     * @param emailJobModel 1
+     * @return java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @Override
+    public Map<String, Object> deleteEmailJob(EmailJobModel emailJobModel) {
+        Map<String, Object> map = new HashMap<>();
+        emailManagementDao.deleteEmailJob(emailJobModel);
+        map.put("code", "200");
+        map.put("status", "success");
+        map.put("msg", "删除发送任务成功");
+
+        return map;
+    }
+
+    /**
+     * 生成入库所需的数据结构
+     *  {\_/}
+     * ( ^.^ )
+     *  / > @ zhangmaofei
+     * @date 2019/10/23 11:20
+     * @param strings 1
+     * @param eRole 2
+     * @return java.util.List<java.util.Map<java.lang.String,java.lang.String>>
+     */
+    public List<Map<String, String>> getStructureToDB(String[] strings,String emailJobCode, String eRole,String operater) {
+        List<Map<String, String>> list = new ArrayList<>();
+        for (int i = 0; i <strings.length ; i++) {
+            Map<String, String> rmap = new HashMap<>();
+            rmap.put("emailJobCode", emailJobCode);
+            rmap.put("emailId", strings[i]);
+            rmap.put("eRole", eRole);
+            rmap.put("operater", operater);
+
+            list.add(rmap);
+        }
+
+        return list;
     }
 
     /**
@@ -278,18 +379,6 @@ public class EmailManagementServiceImpl implements EmailManagementService {
 
     }
 
-
-/*    public static void main(String[] args) {
-        List<String> list = new ArrayList<>();
-//        list.add("1");
-//        list.add("2");
-//        list.add("3");
-//        list.add("4");
-
-        EmailManagementServiceImpl e = new EmailManagementServiceImpl();
-
-        System.out.println(e.listTOStringOfComma(list).equals(""));
-    }*/
     /**
      * list集合中的各个字符串转化成用逗号(,)拼接的大字符串
      *  {\_/}

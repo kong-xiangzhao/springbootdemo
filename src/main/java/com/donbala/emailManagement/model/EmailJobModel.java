@@ -21,6 +21,43 @@ public class EmailJobModel implements Serializable {
     //抄送人邮箱
     private String emailCopype;
 
+    private String makeDate;
+    private String makeUser;
+    private String modifyDate;
+    private String modifyUser;
+
+    public String getMakeDate() {
+        return makeDate;
+    }
+
+    public void setMakeDate(String makeDate) {
+        this.makeDate = makeDate;
+    }
+
+    public String getMakeUser() {
+        return makeUser;
+    }
+
+    public void setMakeUser(String makeUser) {
+        this.makeUser = makeUser;
+    }
+
+    public String getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(String modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public String getModifyUser() {
+        return modifyUser;
+    }
+
+    public void setModifyUser(String modifyUser) {
+        this.modifyUser = modifyUser;
+    }
+
     public String getEmailJobCode() {
         return emailJobCode;
     }
@@ -60,4 +97,6 @@ public class EmailJobModel implements Serializable {
     public void setEmailCopype(String emailCopype) {
         this.emailCopype = emailCopype;
     }
+
+
 }

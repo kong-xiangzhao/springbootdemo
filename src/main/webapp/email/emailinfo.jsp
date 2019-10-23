@@ -144,11 +144,11 @@
                     <div class="col-lg-12">
                         <div class="card alert">
                             <div class="card-header">
-                                <h4>邮箱列表</h4>
+                                <h4>发件邮箱</h4>
                             </div>
                             <div class="card-body">
                                 <div class="row">
-                                    <table id="jobplantable"
+                                    <table id="sendemailtable"
                                            class="table  table-bordered table-striped"
                                            data-toggle="table"
                                            data-click-to-select="true"
@@ -160,7 +160,25 @@
                             </div>
                         </div>
                     </div><!-- /# card -->
-
+                    <div class="col-lg-12">
+                        <div class="card alert">
+                            <div class="card-header">
+                                <h4>通讯邮箱</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <table id="receiveemailtable"
+                                           class="table  table-bordered table-striped"
+                                           data-toggle="table"
+                                           data-click-to-select="true"
+                                           data-pagination="true"
+                                           data-show-footer="true"
+                                           data-side-pagination="client">
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <!-- /# row -->
 
@@ -223,9 +241,8 @@
                                                                         title="请选择" class="selectpicker"
                                                                         data-style="form-control"
                                                                         data-width="100%">
-                                                                    <option value="S" >发件人</option>
-                                                                    <option value="R" >收件人</option>
-                                                                    <option value="C" >抄送人</option>
+                                                                    <option value="S" >发件邮箱</option>
+                                                                    <option value="T" >通讯邮箱</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -323,9 +340,8 @@
                                                                     title="请选择" class="selectpicker"
                                                                     data-style="form-control"
                                                                     data-width="100%">
-                                                                <option value="S" >发件人</option>
-                                                                <option value="R" >收件人</option>
-                                                                <option value="C" >抄送人</option>
+                                                                <option value="S" >发件邮箱</option>
+                                                                <option value="T" >通讯邮箱</option>
                                                             </select>
                                                         </div>
                                                     </div>

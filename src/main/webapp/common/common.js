@@ -88,3 +88,22 @@ function emptyModel(elementIds) {
         }
     }
 }
+
+/**
+ * 字符串数组转化成以逗号分隔的字符串
+ * @param params ["a","b","c"]
+ * @returns {string}  "a,b,c"
+ */
+function getTextByJs(params) {
+    var str = "";
+    if(params!=null){
+        for (var i = 0; i < params.length; i++) {
+            str += params[i]+ ",";
+        }
+        //去掉最后一个逗号(如果不需要去掉，就不用写)
+        if (str.length > 0) {
+            str = str.substr(0, str.length - 1);
+        }
+    }
+    return str;
+}
