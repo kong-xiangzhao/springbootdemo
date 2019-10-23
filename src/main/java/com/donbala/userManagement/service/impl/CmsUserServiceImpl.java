@@ -23,7 +23,7 @@ import java.util.UUID;
 @Service
 public class CmsUserServiceImpl implements CmsUserServiceIntf {
 
-    public final static Logger log = (Logger) LoggerFactory.getLogger(CmsUserServiceImpl.class);
+    public final static LoggetAllMenuger log = (Logger) LoggerFactory.getLogger(CmsUserServiceImpl.class);
 
     @Autowired
     private CmsUserMapper cmsUserMapper;

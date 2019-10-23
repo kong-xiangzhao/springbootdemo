@@ -2,16 +2,19 @@
 
 /* -----------------------jquery主函数 begin------------------------------------------*/
 $(function () {
+    //点击新增用户，模态框弹出时清空输入框的值
+    $('#adduser').click(function(){
+        emptyModel(["newusercode","newpassword","newusername","newmobile","newemail","roleselect"]);
+        $("#roleselect").on("shown.bs.select",function(){
+            codeSelect('#roleselect','role');
+        });
+    });
 
     //初始化表格
     initTable();
     //查询按钮动作
     $("#queryuser").click(function(){
         queryuserlist();
-    });
-
-    $("#roleselect").on("shown.bs.select",function(){
-        codeSelect('#roleselect','role');
     });
 
     //新增保存按钮动作
