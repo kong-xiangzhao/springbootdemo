@@ -1,17 +1,15 @@
 package com.donbala.userManagement.service.impl;
 
-import ch.qos.logback.classic.Logger;
 import com.donbala.loginManagement.dao.CmsLogintraceMapper;
+import com.donbala.loginManagement.model.CmsLogintrace;
 import com.donbala.menuManagement.dao.CmsMenuMapper;
 import com.donbala.menuManagement.dao.CmsUserroleMapper;
-import com.donbala.loginManagement.model.CmsLogintrace;
 import com.donbala.menuManagement.model.CmsMenu;
 import com.donbala.roleManagement.model.CmsUserrole;
 import com.donbala.userManagement.dao.CmsUserMapper;
 import com.donbala.userManagement.model.CmsUser;
 import com.donbala.userManagement.service.CmsUserServiceIntf;
 import com.donbala.util.DateUtil;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,8 +20,6 @@ import java.util.UUID;
 
 @Service
 public class CmsUserServiceImpl implements CmsUserServiceIntf {
-
-    public final static LoggetAllMenuger log = (Logger) LoggerFactory.getLogger(CmsUserServiceImpl.class);
 
     @Autowired
     private CmsUserMapper cmsUserMapper;
