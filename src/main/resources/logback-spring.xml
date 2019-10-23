@@ -36,7 +36,7 @@
  
 
         <!-- 添加mybatis日志打印  begin-->
-        <logger name="com.donbala.*" level="DEBUG" additivity="false">
+        <logger name="com.donbala" level="DEBUG" additivity="false">
         	<appender-ref ref="FILE"/>
         	<!-- 开发时如果想在控制台打印日志，则需要将下面这行注释放开 -->
  			<appender-ref ref="STDOUT"/>

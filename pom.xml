@@ -59,7 +59,7 @@
         <!-- activemq -->
         <dependency>
             <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-all</artifactId>
+            <artifactId>activemq-client</artifactId>
             <version>5.11.2</version>
         </dependency>
         <!--jsp lib dependency-->
