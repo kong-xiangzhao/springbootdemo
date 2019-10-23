@@ -55,8 +55,8 @@ public class EmailManagementController {
      * @return java.util.List<com.donbala.emailManagement.model.EmailModel>
      */
     @RequestMapping(value="/email/management/selectEmail",method= RequestMethod.POST)
-    public List<EmailModel> selectEmailInfo(){
-        return emailManagementService.selectEmailInfo();
+    public List<EmailModel> selectEmailInfo(EmailModel emailModel){
+        return emailManagementService.selectEmailInfo(emailModel);
     }
     /**
      * 启用
@@ -130,9 +130,49 @@ public class EmailManagementController {
     }
     ////邮箱管理结束
     ///邮件发送管理开始
+    /**
+     * 查询发送任务列表
+     *  {\_/}
+     * ( ^.^ )
+     *  / > @ zhangmaofei
+     * @date 2019/10/23 14:04
+     * @param
+     * @return java.util.List<com.donbala.emailManagement.model.EmailJobModel>
+     */
     @RequestMapping(value="/email/management/selectEmailJobInfo",method= RequestMethod.POST)
     public List<EmailJobModel> selectEmailJobInfo(){
         return emailManagementService.selectEmailJobList();
     }
+    /**
+     * 新增发送任务
+     *  {\_/}
+     * ( ^.^ )
+     *  / > @ zhangmaofei
+     * @date 2019/10/23 14:04
+     * @param emailJobModel 1
+     * @param session 2
+     * @return java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @RequestMapping(value="/email/management/insertEmailJob",method= RequestMethod.POST)
+    public Map<String, Object> insertEmailJob(EmailJobModel emailJobModel, HttpSession session) {
+        String user = ((CmsUser) session.getAttribute("user")).getUsercode();
+        emailJobModel.setMakeUser(user);
+        emailJobModel.setModifyUser(user);
+        Map<String, Object> map = emailManagementService.insertEmailJob(emailJobModel);
+        return map;
 
+    }
+    /**
+     * 删除发送任务
+     *  {\_/}
+     * ( ^.^ )
+     *  / > @ zhangmaofei
+     * @date 2019/10/23 17:57
+     * @param emailJobModel 1
+     * @return java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @RequestMapping(value="/email/management/deleteEmailJob",method= RequestMethod.POST)
+    public Map<String, Object> deleteEailJob(EmailJobModel emailJobModel){
+        return emailManagementService.deleteEmailJob(emailJobModel);
+    }
 }

@@ -310,14 +310,19 @@ public class QuartzServiceImpl implements QuartzServiceIntf {
         qz.setCronExp(QuartzUtils.cron(qz));
         qz.setRunType("0");//cron任务
         quartzMapper.insertJobPlanDef(qz);
+        //前端参数是这么封装的   IP:10.1.18.56,endDate:2019-10-23 15:10:20,startDate:2019-10-23 15:10:19
         String[] values = qz.getParamValue().split(",");
         if(qz.getParamValue()!=null && !qz.getParamValue().equals("")) {
 
             List<Quartz> paramNames=quartzMapper.selectJobParam(qz);
             for(int i=0;i<values.length;i++) {
-                qz.setParamCode(paramNames.get(i).getParamCode());
-                qz.setParamValue(values[i]);
-                quartzMapper.insertJobPlanParam(qz);
+                for(int j=0;j<paramNames.size();j++) {
+                    if(values[i].split(":")[0].equals(paramNames.get(j).getParamCode())){
+                        qz.setParamCode(paramNames.get(j).getParamCode());
+                        qz.setParamValue(values[i].split(":")[1]);
+                        quartzMapper.insertJobPlanParam(qz);
+                    }
+                }
             }
         }
 
@@ -471,7 +476,9 @@ public class QuartzServiceImpl implements QuartzServiceIntf {
             map.put("status", "ipError");
             return map;
         }
-
+        if(qz.getEndDate()==null || qz.getEndDate().equals("")) {
+            qz.setEndDate("9999-12-31 00:00:00");
+        }
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String date = df.format(new Date());
 
@@ -492,9 +499,15 @@ public class QuartzServiceImpl implements QuartzServiceIntf {
 
             List<Quartz> paramNames=quartzMapper.selectJobParam(qz);
             for(int i=0;i<values.length;i++) {
-                qz.setParamCode(paramNames.get(i).getParamCode());
-                qz.setParamValue(values[i]);
-                quartzMapper.insertJobPlanParam(qz);
+                for(int j=0;j<paramNames.size();j++) {
+                    System.out.println(values[i].split(":")[0]+"*****"+paramNames.get(j).getParamCode());
+
+                    if(values[i].split(":")[0].equals(paramNames.get(j).getParamCode())){
+                        qz.setParamCode(paramNames.get(j).getParamCode());
+                        qz.setParamValue(values[i].split(":")[1]);
+                        quartzMapper.insertJobPlanParam(qz);
+                    }
+                }
             }
         }
         try {//删除任务

@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface EmailManagementService {
     Map<String, Object> insertEmailInfo(EmailModel emailModel);
-    List<EmailModel> selectEmailInfo();
+    List<EmailModel> selectEmailInfo(EmailModel emailModel);
     Map<String, Object> startEmail(EmailModel emailModel);
     Map<String, Object> stopEmail(EmailModel emailModel);
     Map<String, Object> deleteEmail(EmailModel emailModel);
@@ -16,6 +16,8 @@ public interface EmailManagementService {
     Map<String,Object> editEmail(EmailModel emailModel);
 
     List<EmailJobModel> selectEmailJobList();
+    Map<String,Object> insertEmailJob(EmailJobModel emailJobModel);
+    Map<String, Object> deleteEmailJob(EmailJobModel emailJobModel);
 
     int sendEmailCommon(String theme,String content,String emailJobCode);
 }

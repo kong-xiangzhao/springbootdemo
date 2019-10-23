@@ -30,11 +30,11 @@
         </select>
         <!-- 查询收件人 -->
         <select id="selectEmailReceiver" resultMap="BaseResultMap">
-            select id code,email codename from cms_emailmaininfo where erole='R' and estatus='1'
+            select id code,email codename from cms_emailmaininfo where erole='T' and estatus='1'
         </select>
         <!-- 查询抄送人 -->
         <select id="selectEmailCopy" resultMap="BaseResultMap">
-            select id code,email codename from cms_emailmaininfo where erole='C' and estatus='1'
+            select id code,email codename from cms_emailmaininfo where erole='T' and estatus='1'
         </select>
 
 
