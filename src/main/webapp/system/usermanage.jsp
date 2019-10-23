@@ -298,7 +298,7 @@
                                                     <div class="form-group">
                                                         <label class="col-sm-4 control-label">角色</label>
                                                         <div class="col-sm-7">
-                                                            <select id="roleselectdetail" class="selectpicker " data-style="form-control" multiple>
+                                                            <select id="roleselectdetail" class="selectpicker" data-style="form-control" multiple>
                                                             </select>
                                                         </div>
                                                     </div>

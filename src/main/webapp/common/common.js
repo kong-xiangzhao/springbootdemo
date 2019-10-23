@@ -16,13 +16,13 @@ function codeSelect(elementid, codetype) {
         data: params,
         success: function (data) {
             var len = data.length;
-            // $(elementid).empty();//每次加载前要先清空
+            $(elementid).empty();//每次加载前要先清空
             for(var i = 0 ; i < len; i++)
             {
                 $(elementid).append("<option value=" + data[i].code + ">" + data[i].codename + "</option>");
             }
             $(elementid).selectpicker('refresh');
-            //$(elementid).selectpicker('render');
+            $(elementid).selectpicker('render');
         },
         fail: function () {
             swal({
