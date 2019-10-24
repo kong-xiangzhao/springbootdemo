@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.donbala.emailManagement.dao.EmailManagementDao">
+
+    <sql id="sqlStart">
+      select t.* from (
+            select v.*,rownum as rn from (
+    </sql>
+    <sql id="sqlEnd">
+            ) v
+            where rownum<![CDATA[ <= ]]>#{pageEnd}) t
+        where t.rn<![CDATA[ > ]]>#{pageStart}
+    </sql>
+
     <!--验证邮箱是否存在-->
     <select id="selectEmailInfoCount" parameterType="com.donbala.emailManagement.model.EmailModel" resultType="int">
         select count(*) from cms_emailmaininfo where email=#{email} and erole=#{eRole}
@@ -117,4 +128,81 @@
     <delete id="deleteEmailJob" parameterType="com.donbala.emailManagement.model.EmailJobModel" >
        delete from cms_emailjobaddress where emailjobcode=#{emailJobCode}
     </delete>
+    <!--发送任务回显-->
+    <select id="emailJobReturnView" parameterType="com.donbala.emailManagement.model.EmailJobModel" resultType="com.donbala.emailManagement.model.EmailJobModel">
+        select d.emailJobCode,
+                d.emailJobName,
+                (select a.emailid
+                   from cms_emailjobaddress a, cms_emailmaininfo m
+                  where a.emailid = m.id
+                    and a.emailjobcode = d.emailjobcode
+                    and a.erole = 'S'
+                    and m.estatus = '1') emailSender,
+                 (select wm_concat(a.emailid)
+                   from cms_emailjobaddress a, cms_emailmaininfo m
+                  where a.emailid = m.id
+                    and a.emailjobcode = d.emailjobcode
+                    and a.erole = 'R'
+                    and m.estatus = '1') emailReceiver,
+                  (select wm_concat(a.emailid)
+                   from cms_emailjobaddress a, cms_emailmaininfo m
+                  where a.emailid = m.id
+                    and a.emailjobcode = d.emailjobcode
+                    and a.erole = 'C'
+                    and m.estatus = '1') emailCopype
+           from cms_emailjobdef d
+          where d.emailjobcode=#{emailJobCode}
+    </select>
+    <!-- 插入邮件日志 -->
+    <insert id="addEmailLog" parameterType="map">
+		INSERT INTO cms_emailsendlog (SERIALNO, SENDER, ADDRESSEE, COPYPERSON, THEME, CONTENT, TYPE, SENDTIME, STATE, ERRMSG, MAKEDATE, MAKEUSER, MODIFYDATE, MODIFYUSER)
+		VALUES (#{serialno}, #{sender}, #{addressee}, #{copyperson}, #{theme}, #{content}, #{type}, Sysdate, #{state}, #{errMsg}, Sysdate, 'system', Sysdate, 'system')
+	</insert>
+    <!--查询邮件日志-->
+    <select id="selectEmailLog" parameterType="com.donbala.emailManagement.model.EmailLogModel" resultType="com.donbala.emailManagement.model.EmailLogModel">
+        <include refid="sqlStart"/>
+        select (select emailjobname from cms_emailjobdef where emailjobcode = s.type) emailJobName,
+                s.theme,
+                s.content,
+                to_char(s.sendtime,'yyyy-mm-dd hh24:mi:ss') sendTime,
+                s.sender emailSender,
+                s.addressee emailReceiver,
+                s.copyperson emailCopype,
+                (case s.state when '1' then '成功' when '0' then '失败' end) sendState,
+                s.errMsg
+        from cms_emailsendlog s
+        where 1=1
+        <if test='emailJobCode != "" and emailJobCode != null'>
+            <![CDATA[AND s.type = #{emailJobCode}]]>
+        </if>
+        <if test='startDate != "" and startDate != null'>
+            <![CDATA[AND TO_DATE(to_char(s.SENDTIME,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') >= TO_DATE(#{startDate},'yyyy-mm-dd hh24:mi:ss')]]>
+        </if>
+        <if test='endDate != "" and endDate != null'>
+            <![CDATA[AND TO_DATE(to_char(S.SENDTIME,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') <= TO_DATE(#{endDate},'yyyy-mm-dd hh24:mi:ss')]]>
+        </if>
+        <if test='sendState != "" and sendState != null'>
+            <![CDATA[AND S.state = #{sendState}]]>
+        </if>
+
+        order by s.sendtime desc
+        <include refid="sqlEnd"/>
+    </select>
+    <select id="selectEmailLogCount" resultType="int" parameterType="com.donbala.emailManagement.model.EmailLogModel">
+        select count(*)
+        from cms_emailsendlog s
+        where 1=1
+        <if test='emailJobCode != "" and emailJobCode != null'>
+            <![CDATA[AND s.type = #{emailJobCode}]]>
+        </if>
+        <if test='startDate != "" and startDate != null'>
+            <![CDATA[AND TO_DATE(to_char(s.SENDTIME,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') >= TO_DATE(#{startDate},'yyyy-mm-dd hh24:mi:ss')]]>
+        </if>
+        <if test='endDate != "" and endDate != null'>
+            <![CDATA[AND TO_DATE(to_char(S.SENDTIME,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') <= TO_DATE(#{endDate},'yyyy-mm-dd hh24:mi:ss')]]>
+        </if>
+        <if test='sendState != "" and sendState != null'>
+            <![CDATA[AND S.state = #{sendState}]]>
+        </if>
+    </select>
 </mapper>

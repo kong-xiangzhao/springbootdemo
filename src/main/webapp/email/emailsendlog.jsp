@@ -101,7 +101,7 @@
                         <div class="page-header">
                             <div class="page-title">
                                 <ol class="breadcrumb text-right">
-                                    <li class="active">任务管理</li>
+                                    <li class="active">邮箱管理</li>
                                     <li><a href="#">日志管理</a></li>
                                 </ol>
                             </div>
@@ -123,9 +123,9 @@
                                             <div class="row">
                                                 <div class="col-md-3 ">
                                                     <div class="form-group ">
-                                                        <label class="col-md-5 control-label">作业名称</label>
+                                                        <label class="col-md-5 control-label">发送任务</label>
                                                         <div class="col-sm-7">
-                                                            <select id="jobCode1" name="jobCode" title="请选择"
+                                                            <select id="emailJob" name="emailJob" title="请选择"
                                                                     class="selectpicker"
                                                                     data-style="form-control" data-width="100%" >
                                                             </select>
@@ -134,7 +134,7 @@
                                                 </div><!-- /# column -->
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label class="col-md-5 control-label">执行开始时间</label>
+                                                        <label class="col-md-5 control-label">开始时间</label>
                                                         <div class="col-md-7">
                                                             <input id="startDate" type="text" class="form-control " autocomplete="off">
                                                         </div>
@@ -142,7 +142,7 @@
                                                 </div><!-- /# column -->
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label class="col-md-5 control-label">执行结束时间</label>
+                                                        <label class="col-md-5 control-label">结束时间</label>
                                                         <div class="col-md-7">
                                                             <input id="endDate" type="text" class="form-control " autocomplete="off">
                                                         </div>
@@ -150,22 +150,22 @@
                                                 </div><!-- /# column -->
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label class="col-md-5 control-label">执行状态</label>
+                                                        <label class="col-md-5 control-label">发送状态</label>
                                                         <div class="col-md-7">
 
-                                                            <select id="runState" name="runState" title="请选择"
+                                                            <select id="sendState" name="runState" title="请选择"
                                                                     class="selectpicker"
                                                                     data-style="form-control" data-width="100%" >
                                                                 <option style='display: none' ></option>
-                                                                <option value="0">执行中</option>
-                                                                <option value="1">已完成</option>
+                                                                <option value="0">失败</option>
+                                                                <option value="1">成功</option>
                                                             </select>
                                                         </div>
                                                     </div>
                                                 </div><!-- /# column -->
                                             </div>
                                             <div class="row">
-                                                <input id="queryRunLog" type="button" value="查 询" class="btn btn-primary m-b-10 m-l-5"></input>
+                                                <input id="querySendLog" type="button" value="查 询" class="btn btn-primary m-b-10 m-l-5"></input>
                                                 <%--<input id="addrole" type="button" value="增 加" class="btn btn-primary m-b-10 m-l-5" data-toggle="modal" data-target="#roleform"></input>--%>
                                             </div>
                                         </form><!--/#form-->
@@ -187,7 +187,7 @@
                                 </div>
                                 <div class="card-body">
                                             <div class="row">
-                                                <table id="jobRunLogTable"
+                                                <table id="emailSendLogTable"
                                                        class="table  table-bordered table-striped"
                                                        data-toggle="table"
                                                        data-click-to-select="true"
@@ -236,7 +236,7 @@
 <!-- bootstrap -->
 <script src="../assets/lib/lobipanel/js/lobipanel.js"></script>
 <script src="../assets/js/scripts.js"></script>
-<script src="jobplanlog.js"></script>
+<script src="emailsendlog.js"></script>
     <!-- role.js -->
 </body>
 

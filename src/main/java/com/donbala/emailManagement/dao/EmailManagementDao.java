@@ -1,6 +1,7 @@
 package com.donbala.emailManagement.dao;
 
 import com.donbala.emailManagement.model.EmailJobModel;
+import com.donbala.emailManagement.model.EmailLogModel;
 import com.donbala.emailManagement.model.EmailModel;
 
 import java.util.List;
@@ -35,4 +36,13 @@ public interface EmailManagementDao {
     //删除发送任务
     int deleteEmailJob(EmailJobModel emailJobModel);
 
+    //发送任务回显
+    EmailJobModel emailJobReturnView(EmailJobModel emailJobModel);
+
+    //插入发送日志
+    int addEmailLog(Map<String, Object> map);
+
+    //查询发送日志
+    List<EmailLogModel> selectEmailLog(EmailLogModel emailLogModel);
+    int selectEmailLogCount(EmailLogModel emailLogModel);
 }

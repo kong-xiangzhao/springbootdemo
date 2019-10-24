@@ -1,6 +1,7 @@
 package com.donbala.emailManagement.service;
 
 import com.donbala.emailManagement.model.EmailJobModel;
+import com.donbala.emailManagement.model.EmailLogModel;
 import com.donbala.emailManagement.model.EmailModel;
 
 import java.util.List;
@@ -18,6 +19,10 @@ public interface EmailManagementService {
     List<EmailJobModel> selectEmailJobList();
     Map<String,Object> insertEmailJob(EmailJobModel emailJobModel);
     Map<String, Object> deleteEmailJob(EmailJobModel emailJobModel);
+    EmailJobModel emailJobReturnView(EmailJobModel emailJobModel);
+    Map<String, Object> editEmailJob(EmailJobModel emailJobModel);
+
+    Map<String, Object> selectEmailLog(EmailLogModel emailLogModel);
 
     int sendEmailCommon(String theme,String content,String emailJobCode);
 }

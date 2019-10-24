@@ -107,3 +107,74 @@ function getTextByJs(params) {
     }
     return str;
 }
+
+/**
+ * bootstrapTable内容过多，隐藏--方式1：内容大于30字符则大于的部分隐藏，点击 更多 显示内容
+ * 使用说明：
+ * 需要隐藏的列添加这个属性
+ *
+ * formatter: contentTooMore1,
+ */
+
+/////start//////
+//先定义一个全局变量count
+var count = -1;
+var contentTooMore1 = function (value) {
+    //没有内容的时候显示“-”
+    var temp = "";
+    if (value == '') {
+        var temp = "-";
+    } else {
+        temp = value;
+    }
+    //有内容时，内容大于30字符则大于的部分隐藏，点击 更多 显示内容
+    var text = value;
+    var flag = text.length > 30 ? true : false;
+    if (flag) {
+        count = count + 1;
+        temp = "<p>" + text.substring(0, 30)
+            + "<span id='hide" + count + "' style='display:none'>" + text.substring(30) + "</span>"
+            + "<a href='javascript:;' style='color: green' id='open" + count + "' onclick='showhide(" + count + ")'>...更多</a></p>"
+    }
+
+    return temp;
+}
+function showhide(count) {
+    if ($("#open" + count).text() == "...更多") {
+        $("#open" + count).text("收起");
+        $("#hide" + count).show();
+    } else {
+        $("#open" + count).text("...更多");
+        $("#hide" + count).hide();
+    }
+}
+///////end/////
+
+/**
+ * bootstrapTable内容过多，隐藏--方式2：超过150px隐藏，鼠标放上面显示
+ * 使用说明：
+ * 需要隐藏的列添加这两个属性
+ *
+ * formatter: contentTooMoreFormatter,
+ * cellStyle: contentTooMoreCellStyle
+ */
+
+///////start/////
+function contentTooMoreFormatter(value,row,index,field) {
+    var span = document.createElement('span');
+    span.setAttribute('title',value);
+    span.innerHTML = value;
+    return span.outerHTML;
+}
+//td宽度及内容超过宽度隐藏
+function contentTooMoreCellStyle(value,row,index,field) {
+    return {
+        css: {"min-width": '150px',
+            "white-space": 'nowrap',
+            "text-overflow": 'ellipsis',
+            "overflow": 'hidden',
+            "max-width":'150px'
+        }
+    }
+}
+///////end/////
