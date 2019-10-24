@@ -526,7 +526,7 @@ function saveJob() {
  */
 function editJobPlan() {
     var jobPlanCode="";
-    var jobCode="";
+    var jobCode=$("#jobCodeEdit").val();
     var repeatInterval="";
     var repeatUnit="";
     var jobStartDate="";
@@ -540,9 +540,9 @@ function editJobPlan() {
     for(let i=0;i<initParam.length;i++){
         console.log(initParam[i].name)
         paramId=initParam[i].name
-        if(paramId=="jobCodeEdit"){
-            jobCode=$("#"+paramId).val();
-        }
+        // if(paramId=="jobCodeEdit"){
+        //     jobCode=$("#"+paramId).val();
+        // }
         if(paramId=="jobPlanCodeEdit"){
             jobPlanCode=$("#"+paramId).val();
         }
@@ -564,7 +564,7 @@ function editJobPlan() {
         }
     }
 
-    console.log("计划号："+jobPlanCode);
+    // console.log("计划号："+jobCode);
     var params = {
         jobCode: jobCode,
         jobPlanCode:jobPlanCode,
@@ -580,7 +580,7 @@ function editJobPlan() {
     }
     //验证非空
     let flag=checkIsNull(params);
-    alert(flag)
+    // alert(flag)
     if(flag){
         $.ajax({
             url: systemPath + "/quartz/management/editJobPlan",

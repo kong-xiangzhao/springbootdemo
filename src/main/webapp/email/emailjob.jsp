@@ -24,6 +24,7 @@
 
         }
 
+
     </style>
 </head>
 
@@ -280,7 +281,7 @@
 
                 <div class="row">
                     <!-- 修改邮箱表单（Modal） -->
-                    <div class="modal fade" id="emailEditForm" tabindex="1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="true">
+                    <div class="modal fade" id="emailJobEditForm" tabindex="1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="true">
                         <div class="modal-dialog" style="width:1000px">
 
                             <div class="modal-content zmf-modal-content">
@@ -289,7 +290,7 @@
                                         &times  关闭
                                     </button>
                                     <h4 class="modal-title" id="myModalLabel1">
-                                        修改邮箱
+                                        修改发送任务
                                     </h4>
                                 </div>
 
@@ -303,19 +304,22 @@
 
                                                 <div class="form-group col-sm-6">
                                                     <div class="row">
-                                                        <label class="col-sm-4 control-label">邮箱</label>
+                                                        <label class="col-sm-4 control-label">目标任务</label>
                                                         <div class="col-sm-8">
-                                                            <input id="emailEdit" name="emailEdit" type="text"
-                                                                   class="form-control " autocomplete="off" >
+                                                            <select id="emailJobEdit" name="emailJobEdit"
+                                                                    title="请选择" class="selectpicker"
+                                                                    data-style="form-control"
+                                                                    data-width="100%" disabled="disabled">
+                                                            </select>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-sm-6">
                                                     <div class="row">
-                                                        <label class="col-sm-4 control-label ">启停状态</label>
+                                                        <label class="col-sm-4 control-label ">发件人</label>
 
                                                         <div class="col-sm-8">
-                                                            <select id="eStatusEdit" name="eStatusEdit"
+                                                            <select id="senderEdit" name="senderEdit"
                                                                     title="请选择" class="selectpicker"
                                                                     data-style="form-control"
                                                                     data-width="100%">
@@ -330,16 +334,28 @@
 
                                                 <div class="form-group col-sm-6">
                                                     <div class="row">
-                                                        <label class="col-sm-4 control-label ">邮箱角色</label>
+                                                        <label class="col-sm-4 control-label ">收件人</label>
 
                                                         <div class="col-sm-8">
-                                                            <select id="eRoleEdit" name="eRoleEdit"
-                                                                    title="请选择" class="selectpicker"
+                                                            <select id="receiverEdit" name="receiverEdit"
+                                                                    title="请选择" class="selectpicker" multiple="multiple"
                                                                     data-style="form-control"
                                                                     data-width="100%">
-                                                                <option value="S" >发件人</option>
-                                                                <option value="R" >收件人</option>
-                                                                <option value="C" >抄送人</option>
+
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-sm-6">
+                                                    <div class="row">
+                                                        <label class="col-sm-4 control-label ">抄送人</label>
+
+                                                        <div class="col-sm-8">
+                                                            <select id="copypeEdit" name="copypeEdit"
+                                                                    title="请选择" class="selectpicker" multiple="multiple"
+                                                                    data-style="form-control"
+                                                                    data-width="100%">
+
                                                             </select>
                                                         </div>
                                                     </div>
@@ -367,7 +383,7 @@
                                 </div>
                                 <%--新结束--%>
                                 <div class="modal-footer">
-                                    <input type="button" value="保存" id="editEmailInfo"  class="btn btn-primary"></input>
+                                    <input type="button" value="保存" id="editEmailJobInfo"  class="btn btn-primary"></input>
                                     <input type="button" value="关闭" class="btn btn-default" data-dismiss="modal"></input>
                                 </div>
                             </div><!-- /.modal-content -->

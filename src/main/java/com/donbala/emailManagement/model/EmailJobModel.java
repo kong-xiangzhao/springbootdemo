@@ -21,6 +21,7 @@ public class EmailJobModel implements Serializable {
     //抄送人邮箱
     private String emailCopype;
 
+
     private String makeDate;
     private String makeUser;
     private String modifyDate;

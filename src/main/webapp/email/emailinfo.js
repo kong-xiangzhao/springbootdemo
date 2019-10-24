@@ -241,8 +241,11 @@ function editEmail() {
                         type: data.status
                     },
                     function(){
-                        $("#emailEditForm").modal('hide');//保存成功则关闭模态框，并且重置模态框
-                        window.location.reload();//重新刷新页面
+                        if(data.status=="success"){
+                            $("#emailEditForm").modal('hide');//保存成功则关闭模态框，并且重置模态框
+                            window.location.reload();//重新刷新页面
+                        }
+
                     }
                 );
 
@@ -462,8 +465,10 @@ function saveEmail() {
                         type: data.status
                     },
                     function(){
-                        $("#emailAddForm").modal('hide');//保存成功则关闭模态框，并且重置模态框
-                        window.location.reload();//重新刷新页面
+                        if(data.status=="success") {
+                            $("#emailAddForm").modal('hide');//保存成功则关闭模态框，并且重置模态框
+                            window.location.reload();//重新刷新页面
+                        }
                     }
                 );
 

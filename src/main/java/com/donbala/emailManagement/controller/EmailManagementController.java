@@ -1,6 +1,7 @@
 package com.donbala.emailManagement.controller;
 
 import com.donbala.emailManagement.model.EmailJobModel;
+import com.donbala.emailManagement.model.EmailLogModel;
 import com.donbala.emailManagement.model.EmailModel;
 import com.donbala.emailManagement.service.EmailManagementService;
 import com.donbala.userManagement.model.CmsUser;
@@ -175,4 +176,49 @@ public class EmailManagementController {
     public Map<String, Object> deleteEailJob(EmailJobModel emailJobModel){
         return emailManagementService.deleteEmailJob(emailJobModel);
     }
+    /**
+     * 发送任务回显
+     *  {\_/}
+     * ( ^.^ )
+     *  / > @ zhangmaofei
+     * @date 2019/10/24 11:07
+     * @param emailJobModel 1
+     * @return com.donbala.emailManagement.model.EmailJobModel
+     */
+    @RequestMapping(value="/email/management/returnEmailJob",method= RequestMethod.POST)
+    public EmailJobModel emailJobReturnView(EmailJobModel emailJobModel){
+        return emailManagementService.emailJobReturnView(emailJobModel);
+    }
+    /**
+     * 修改发送任务
+     *  {\_/}
+     * ( ^.^ )
+     *  / > @ zhangmaofei
+     * @date 2019/10/24 17:26
+     * @param emailJobModel 1
+     * @param session 2
+     * @return java.util.Map<java.lang.String,java.lang.Object>
+     */
+    @RequestMapping(value="/email/management/editEmailJob",method= RequestMethod.POST)
+    public Map<String,Object> editEmailJob(EmailJobModel emailJobModel, HttpSession session){
+        String user = ((CmsUser) session.getAttribute("user")).getUsercode();
+        emailJobModel.setMakeUser(user);
+        emailJobModel.setModifyUser(user);
+        return emailManagementService.editEmailJob(emailJobModel);
+    }
+    /**
+     * 查询发送日志
+     *  {\_/}
+     * ( ^.^ )
+     *  / > @ zhangmaofei
+     * @date 2019/10/24 17:28
+     * @param emailLogModel 1
+     * @return java.util.List<com.donbala.emailManagement.model.EmailLogModel>
+     */
+    @RequestMapping(value="/email/sendlog/search",method= RequestMethod.POST)
+    public Map<String, Object> selectEmailLog(EmailLogModel emailLogModel) {
+        return emailManagementService.selectEmailLog(emailLogModel);
+    }
+
+
 }

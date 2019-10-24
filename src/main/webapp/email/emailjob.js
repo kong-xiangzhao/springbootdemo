@@ -18,19 +18,24 @@ $(function(){
     //     initJobParam("#initParamEdit","Edit");
     // });
 
-    //初始化邮箱状态下拉框
+    //初始化下拉框
     initDropdown('#emailJob','emailJob');
     initDropdown('#sender','emailSender');
     initDropdown('#receiver','emailReceiver');
     initDropdown('#copype','emailCopype');
+
+    initDropdown('#emailJobEdit','emailJob');
+    initDropdown('#senderEdit','emailSender');
+    initDropdown('#receiverEdit','emailReceiver');
+    initDropdown('#copypeEdit','emailCopype');
 
     //新增邮箱点击
     $("#saveEmailJobInfo").click(function () {
         saveEmailJob();
     });
     //修改邮箱点击
-    $("#editEmailInfo").click(function () {
-        editEmail();
+    $("#editEmailJobInfo").click(function () {
+        editEmailJobInfo();
     });
 });
 
@@ -63,13 +68,16 @@ function initTable() {
                 field: 'emailReceiver',
                 align: 'center',
                 valign: 'middle',
+                formatter: contentTooMore1,//内容多，收起1
                 width: 100
             },{
                 title: '抄送人',
                 field: 'emailCopype',
                 align: 'center',
                 valign: 'middle',
-                width: 150
+                width: 150,
+                formatter: contentTooMoreFormatter,
+                cellStyle: contentTooMoreCellStyle
             },{
                 title: '操作',
                 field: 'operate',
@@ -89,10 +97,16 @@ function initTable() {
     });
 }
 
+
+
+
+
+
+
 /*操作列的格式*/
 function operateFormatter(value, row, index) {
     return [
-        '<a id="editEmailJob" href="javascript:void(0)" title="编辑" data-toggle="modal" data-target="#emailEditForm" style="color: blue">',
+        '<a id="editEmailJob" href="javascript:void(0)" title="编辑" data-toggle="modal" data-target="#emailJobEditForm" style="color: blue">',
         '编辑',
         '</a>  ',
         '</a> ',
@@ -106,7 +120,7 @@ function operateFormatter(value, row, index) {
 window.operateEvents = {
 
     'click #editEmailJob': function (e, value, row, index) {
-        emailReturnView(row.emailJobCode);
+        emailJobReturnView(row.emailJobCode);
     },
     'click #deleteEmailJob': function (e, value, row, index) {
         isDeleteEmailJob(row.emailJobCode);
@@ -132,37 +146,27 @@ function queryEmailList() {
 
 
 //修改邮箱实现
-function editEmail() {
-    var email=$("#emailEdit").val();
-    var eStatus=$("#eStatusEdit").val();
-    var eRole=$("#eRoleEdit").val();
-    var eHost=$("#eHostEdit").val();
-    var ePassword=$("#ePasswordEdit").val();
-    var nickName=$("#nickNameEdit").val();
-    var emailid=$("#emailid").val();
+function editEmailJobInfo() {
 
+    var emailJob=$("#emailJobEdit").val();
+    var sender=$("#senderEdit").val();
+    var receiver=$("#receiverEdit").val();
+    var copype=$("#copypeEdit").val();
 
+    receiver=getTextByJs(receiver);
+    copype=getTextByJs(copype);
     var params={
-        id:emailid,
-        email:email,
-        eStatus:eStatus,
-        eRole:eRole,
-        eHost:eHost,
-        ePassword:ePassword,
-        nickName:nickName
+        emailJobCode:emailJob,
+        emailSender:sender,
+        emailReceiver:receiver,
+        emailCopype:copype
     };
-    //验证非空
-    params=checkIsNull(params);
-    // console.log(params.flag)
-    //将undefined的转为空字符串
-    for (let param in params){
-        if(params[param]==undefined){
-            params[param] = "";
-        }
-    }
-    if(params.flag){
+    console.log(params);
+    var flag=checkIsNull(params);
+    // console.log(flag);
+    if(flag){
         $.ajax({
-            url: systemPath + "/email/management/editEmail",
+            url: systemPath + "/email/management/editEmailJob",
             type: "POST",
             dateType: JSON,
             data: params,
@@ -173,8 +177,10 @@ function editEmail() {
                         type: data.status
                     },
                     function(){
-                        $("#emailEditForm").modal('hide');//保存成功则关闭模态框，并且重置模态框
-                        window.location.reload();//重新刷新页面
+                        if(data.status=="success"){
+                            $("#emailAddForm").modal('hide');//保存成功则关闭模态框，并且重置模态框
+                            window.location.reload();//重新刷新页面
+                        }
                     }
                 );
 
@@ -188,59 +194,29 @@ function editEmail() {
         });
     }
 
+
 }
-//邮箱回显
-function emailReturnView(id) {
-    console.log(id);
+//发送任务回显
+function emailJobReturnView(emailJobCode) {
     var params={
-        id:id
+        emailJobCode:emailJobCode
     }
     $.ajax({
-        url:systemPath + "/email/management/returnEmail",
+        url:systemPath + "/email/management/returnEmailJob",
         type: "POST",
         dateType: "json",
         data: params,
         success: function (data) {
-            $("#emailEdit").val(data.email);
-            $("#eStatusEdit").selectpicker('val', data.eStatus);
-            $("#eRoleEdit").selectpicker('val', data.eRole);
-            $("#emailHiddenID").append("<input id=\"emailid\" name=\"emailid\" type=\"hidden\" value=\""+data.id+"\">");
-            $("#initParamEdit").empty();//每次加载清空div的内容
-            if(data.eRole=="S"){
 
-                //
-                $("#initParamEdit").append("<div style=\"margin-left: 1.5%\"><h4>发件人参数</h4></div><hr style=\"width: 100%\"/>");
-
-
-                $("#initParamEdit").append("<div class=\"form-group col-sm-6\">\n" +
-                    "                     <div class=\"row\">\n" +
-                    "                         <label class=\"col-sm-4 control-label\">" + "邮箱服务器" + "</label>\n" +
-                    "                         <div class=\"col-sm-8\">\n" +
-                    "                             <input id=\"" + "eHostEdit" + "\" value= \"" + data.eHost + "\" type=\"text\"\n" +
-                    "                                    class=\"form-control\" autocomplete=\"off\">\n" +
-                    "                         </div>\n" +
-                    "                     </div>\n" +
-                    "                  </div>");
-                $("#initParamEdit").append("<div class=\"form-group col-sm-6\">\n" +
-                    "                     <div class=\"row\">\n" +
-                    "                         <label class=\"col-sm-4 control-label\">" + "密码" + "</label>\n" +
-                    "                         <div class=\"col-sm-8\">\n" +
-                    "                             <input id=\"" + "ePasswordEdit" + "\" value=\"" + data.ePassword + "\" type=\"text\"\n" +
-                    "                                    class=\"form-control\" autocomplete=\"off\">\n" +
-                    "                         </div>\n" +
-                    "                     </div>\n" +
-                    "                  </div>");
-                $("#initParamEdit").append("<div class=\"form-group col-sm-6\">\n" +
-                    "                     <div class=\"row\">\n" +
-                    "                         <label class=\"col-sm-4 control-label\">" + "昵称" + "</label>\n" +
-                    "                         <div class=\"col-sm-8\">\n" +
-                    "                             <input id=\"" + "nickNameEdit" + "\" value=\"" + data.nickName + "\" type=\"text\"\n" +
-                    "                                    class=\"form-control\" autocomplete=\"off\">\n" +
-                    "                         </div>\n" +
-                    "                     </div>\n" +
-                    "                  </div>");
+            $("#emailJobEdit").selectpicker('val', data.emailJobCode);
+            $("#senderEdit").selectpicker('val', data.emailSender);
+            //多选下拉框获取值的时候是字符串数组，回显的时候也传入字符串数组
+            if(data.emailReceiver!=null){
+                $("#receiverEdit").selectpicker('val', data.emailReceiver.split(','));
             }
-
+            if(data.emailCopype!=null){
+                $("#copypeEdit").selectpicker('val', data.emailCopype.split(','));
+            }
         },
         error: function () {
             swal({
@@ -251,7 +227,7 @@ function emailReturnView(id) {
     });
 }
 
-/*是否删除邮箱*/
+/*是否删除发送任务*/
 function isDeleteEmailJob(emailJobCode) {
     swal({
             title: "确定删除吗？",
@@ -265,7 +241,7 @@ function isDeleteEmailJob(emailJobCode) {
             deleteEmailJob(emailJobCode);
         });
 }
-//删除邮箱
+//删除发送任务
 function deleteEmailJob(emailJobCode) {
     var params={
         emailJobCode:emailJobCode
@@ -331,8 +307,10 @@ function saveEmailJob() {
                         type: data.status
                     },
                     function(){
-                        $("#emailAddForm").modal('hide');//保存成功则关闭模态框，并且重置模态框
-                        window.location.reload();//重新刷新页面
+                        if(data.status=="success"){
+                            $("#emailAddForm").modal('hide');//保存成功则关闭模态框，并且重置模态框
+                            window.location.reload();//重新刷新页面
+                        }
                     }
                 );
 
@@ -349,79 +327,6 @@ function saveEmailJob() {
 
 }
 
-
-
-/**
- * 邮件角色下拉值改变事件_实现（生成发件人参数）
- * elementid  标签id
- * suffix   后缀---多个下拉值改变都使用这个（新增和修改）
- */
-function initJobParam(elementId,suffix) {
-    var jobCode=$("#eRole"+suffix).val();
-    var param1 = {
-        paramName: "邮箱服务器",
-        paramCode: "eHost"
-    };
-    var param2 = {
-        paramName: "密码",
-        paramCode: "ePassword"
-    };
-    var param3 = {
-        paramName: "昵称",
-        paramCode: "nickName"
-    }
-    var params=[param1,param2,param3];
-
-    if(jobCode=="S"){
-        $(elementId).empty();//每次加载清空div的内容
-        //
-        $(elementId).append("<div style=\"margin-left: 1.5%\"><h4>发件人参数</h4></div><hr style=\"width: 100%\"/>");
-
-        for (let i = 0; i <params.length ; i++) {
-
-            $(elementId).append("<div class=\"form-group col-sm-6\">\n" +
-                "                     <div class=\"row\">\n" +
-                "                         <label class=\"col-sm-4 control-label\">"+params[i].paramName+"</label>\n" +
-                "                         <div class=\"col-sm-8\">\n" +
-                "                             <input id=\""+params[i].paramCode+suffix+"\" name=\""+params[i].paramCode+suffix+"\" type=\"text\"\n" +
-                "                                    class=\"form-control\" autocomplete=\"off\">\n" +
-                "                         </div>\n" +
-                "                     </div>\n" +
-                "                  </div>");
-
-        }
-
-    }else {
-        $(elementId).empty();
-    }
-
-
-
-}
-
-function initEstatus(elementid) {
-    var param1 = {
-        paramName: "启用",
-        paramCode: "1"
-    };
-    var param2 = {
-        paramName: "停用",
-        paramCode: "0"
-    };
-
-    var params=[param1,param2];
-    initEmailSelect(elementid,params);
-}
-
-function  initEmailSelect(elementid,params){
-    $(elementid).empty();//每次加载前要先清空
-    $(elementid).append("<option style='display: none' ></option>");//默认空白
-    for (let i = 0; i <params.length ; i++) {
-        $(elementid).append("<option value=" + params[i].paramCode + ">" + params[i].paramName + "</option>");
-    }
-    $(elementid).selectpicker('refresh');
-    $(elementid).selectpicker('render');
-}
 
 /**
  * 时间控件

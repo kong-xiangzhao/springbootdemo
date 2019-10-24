@@ -299,7 +299,7 @@
                                                         <div class="col-sm-8">
                                                             <select id="jobCodeEdit" name="jobCodeEdit" title="请选择"
                                                                     class="selectpicker"
-                                                                    data-style="form-control" data-width="100%">
+                                                                    data-style="form-control" data-width="100%" disabled="disabled">
                                                             </select>
                                                         </div>
                                                     </div>
